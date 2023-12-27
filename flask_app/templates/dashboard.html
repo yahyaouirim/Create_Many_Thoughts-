@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <title>Dashboard</title>
+</head>
+<body class="bg-light">
+    <header class="container mt-5" >
+        <div class="container d-flex justify-content-between align-items-center mb-3">
+            <h1 class="text-info">Welcome {{logged_user.first_name}} {{logged_user.last_name}} !</h1>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </div>
+        <div class="container">
+            <form action="/thought/create" method="POST" class="form">
+                <input type="hidden" name="user_id" value="{{logged_user.id}}">
+                <div class="form-group d-flex justify-content-between align-items-center">
+                    <textarea name="content"  cols="20" rows="2" class="form-control w-75" placeholder="Post a thought here"></textarea>
+                    <button type="submit" class="btn btn-success">Add Thought</button>
+                </div>
+                
+
+            </form>
+
+        </div>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <div class="alert alert-danger mt-2 text-center" role="alert">
+                        <strong>Flash Alert!!!!</strong>
+                            {% for message in messages %}
+                            <p>{{message}}</p>
+                            {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endwith %}
+        </div>
+    </header>
+
+    <main class="container mt-5 border-top">
+        {% for thought in thoughts %}
+            <div class="container d-flex justify-content-between mt-5 ">
+                <div>
+                    <a href="/thought/{{thought.user.id}}">{{thought.user.first_name}} says:</a>
+    
+                </div>
+                <div class="container w-50"> 
+                    <p class="border border-3 p-2">{{thought.content}}</p>
+                    <div class="d-flex justify-content-between mt-3 ">
+                        <div>
+                            <a href="/like/{{thought.id}}" class="btn btn-success">Like</a>
+                        
+                            <a href="/unlike/{{thought.id}}" class="btn btn-success">Un-Like</a>
+                        </div>
+                        <span>
+                                <b> 
+                                {{session['count']}}likes</b>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <a href="/thought/{{thought.id}}/delete" class="btn btn-danger">Delete</a>
+                    
+
+    
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>
